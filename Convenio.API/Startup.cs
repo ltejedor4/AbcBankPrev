@@ -29,8 +29,8 @@ namespace Convenio.API
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddXmlSerializerFormatters();
-            
-            
+
+
             services.AddSwaggerGen(c =>
             {
                 c.DescribeAllEnumsAsStrings();
@@ -51,6 +51,7 @@ namespace Convenio.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var pathBase = Configuration["PATH_BASE"];
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -61,7 +62,9 @@ namespace Convenio.API
                     c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty("http://localhost:32787") ? "http://localhost:32787" : string.Empty) }/swagger/v1/swagger.json", "Convenio.API V1");
                     c.OAuthClientId("Convenioswaggerui");
                     c.OAuthAppName("Convenio Swagger UI");
-                });           
+                });
+
+            ConvenioContextSeed.SeedAsync(app).Wait();
 
             app.UseMvc();
         }

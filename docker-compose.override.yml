@@ -1,11 +1,12 @@
 version: '3.4'
 
 services:
-  ocelotapigw:
+  sql.data:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
     ports:
-      - "80"
+      - "32785:1433"  
 
   convenio.api:
     environment:
@@ -13,8 +14,13 @@ services:
     ports:
       - "32787:80"
 
-
   pago.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "32786:80"
+
+  ocelotapigw:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
