@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  ocelotapigw:
+    image: ${DOCKER_REGISTRY}ocelotapigw
+    build:
+      context: .
+      dockerfile: OcelotApiGw/Dockerfile
+
+  convenio.api:
+    image: ${DOCKER_REGISTRY}convenioapi
+    build:
+      context: .
+      dockerfile: Convenio.API/Dockerfile
+
+
+  pago.api:
+    image: ${DOCKER_REGISTRY}pagoapi
+    build:
+      context: .
+      dockerfile: Pago.API/Dockerfile
+

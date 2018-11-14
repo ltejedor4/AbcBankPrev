@@ -1,0 +1,4 @@
+{
+  "balancetopay": "#valueof($.Envelope.Body.Fault.faultcode)",
+  "invoiceref": "#valueof($.Envelope.Body.Fault.faultstring)"
+}

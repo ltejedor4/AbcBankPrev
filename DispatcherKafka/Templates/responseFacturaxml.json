@@ -1,0 +1,4 @@
+{
+  "Amaount": "#valueof($.Envelope.Body.ResultadoConsulta.totalPagar)",
+  "Invoice": "#valueof($.Envelope.Body.ResultadoConsulta.referenciaFactura.referenciaFactura)"
+}

@@ -1,0 +1,4 @@
+{
+  "Amaount": "#valueof($.valorFactura)",
+  "Invoice": "#valueof($.idFactura)"
+}
