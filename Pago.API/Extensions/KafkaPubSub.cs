@@ -13,6 +13,9 @@ namespace Pago.API.Extensions
 {
     public class KafkaPubSub
     {
+        private static string kafkaEndPoint = "localhost:9092";
+        private static string kafkaTopic = "sendtopic";
+        private static string kafkaRetTopic = "rettopic";
         public static async Task<ResponseKafka> ValuetoPay(string invoiceRef)
         {
             KafkaProducer(invoiceRef);
@@ -90,10 +93,10 @@ namespace Pago.API.Extensions
 
         private static void KafkaProducer(string message)
         {
-            var producerConfigSend = new Dictionary<string, object> { { "bootstrap.servers", "" } };
+            var producerConfigSend = new Dictionary<string, object> { { "bootstrap.servers", kafkaEndPoint } };
             using (var producer = new Producer<Null, string>(producerConfigSend, null, new StringSerializer(Encoding.UTF8)))
             {
-                var dr = producer.ProduceAsync("", null, message).Result;
+                var dr = producer.ProduceAsync(kafkaTopic, null, message).Result;
 
             }
         }
@@ -103,7 +106,7 @@ namespace Pago.API.Extensions
             var conf = new Dictionary<string, object>
             {
                 { "group.id", "test-consumer-group" },
-                { "bootstrap.servers", "" },
+                { "bootstrap.servers", kafkaEndPoint },
                 { "auto.commit.interval.ms", 5000 },
                 { "auto.offset.reset", "earliest" }
             };
@@ -119,7 +122,7 @@ namespace Pago.API.Extensions
                 consumer.OnConsumeError += (_, msg)
                   => message = msg.Error.ToString();
 
-                consumer.Subscribe("");
+                consumer.Subscribe(kafkaRetTopic);
 
                 while (true)
                 {

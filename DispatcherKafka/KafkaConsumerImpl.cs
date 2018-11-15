@@ -15,20 +15,23 @@ namespace DispatcherKafka
 {
     public class KafkaConsumerImpl : IKafkaConsumer
     {
+        private static string kafkaEndPoint = "localhost:9092";
+        private static string kafkaTopic = "sendtopic";
+        private static string kafkaRetTopic = "rettopic";
         public void Listen()
         {
             string message = string.Empty;
             var config = new Dictionary<string, object>
             {
                 {"group.id","booking_consumer" },
-                {"bootstrap.servers", "localhost:9092" },
+                {"bootstrap.servers", kafkaEndPoint },
                 { "enable.auto.commit", "false" }
             };
 
 
             using (var consumer = new Consumer<Null, string>(config, null, new StringDeserializer(Encoding.UTF8)))
             {
-                consumer.Subscribe("procesarPago");
+                consumer.Subscribe(kafkaTopic);
                 consumer.OnMessage += (_, msg) => message = msg.Value;
 
                 while (true)
@@ -46,7 +49,7 @@ namespace DispatcherKafka
         public void Dispatching(string invoice, string accion)
         {
             string codConvenio = invoice.Substring(0, 4);
-            var response = RestClient.GetObject<Convenio>("http://localhost:5000/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
+            var response = RestClient.GetObject<Convenio>("http://172.20.0.2/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
 
             string json = "";
             if (response.IsSuccess)
@@ -96,10 +99,10 @@ namespace DispatcherKafka
                     }
                 }
 
-                var producerConfigSend = new Dictionary<string, object> { { "bootstrap.servers", "localhost:9092" } };
+                var producerConfigSend = new Dictionary<string, object> { { "bootstrap.servers", kafkaEndPoint } };
                 using (var producer = new Producer<Null, string>(producerConfigSend, null, new StringSerializer(Encoding.UTF8)))
                 {
-                    var dr = producer.ProduceAsync("respuestaPago", null, json).Result;
+                    var dr = producer.ProduceAsync(kafkaRetTopic, null, json).Result;
                     Console.WriteLine($"Message send to kafka: {json}");
                 }
             }

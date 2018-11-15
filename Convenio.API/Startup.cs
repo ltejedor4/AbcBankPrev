@@ -64,7 +64,7 @@ namespace Convenio.API
                     c.OAuthAppName("Convenio Swagger UI");
                 });
 
-            ConvenioContextSeed.SeedAsync(app).Wait();
+            //ConvenioContextSeed.SeedAsync(app).Wait();
 
             app.UseMvc();
         }

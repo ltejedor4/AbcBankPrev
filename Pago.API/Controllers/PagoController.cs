@@ -35,7 +35,7 @@ namespace Pago.API.Controllers
         public async Task<ActionResult> PayInvoice(string invoice)
         {
             //Todo: producir envento para kafka
-            //var result = await KafkaPubSub.PayInvoice($"{invoice}#consultar");
+            var result = await KafkaPubSub.PayInvoice($"{invoice}#pagar");
             
             return Ok("todo pagado");
 
@@ -50,7 +50,7 @@ namespace Pago.API.Controllers
         public async Task<ActionResult> Compensate(string invoice)
         {
             //Todo: producir envento para kafka
-            //var result = await KafkaPubSub.Compensate($"{invoice}#consultar");
+            var result = await KafkaPubSub.Compensate($"{invoice}#compensar");
             return Ok("todo compensado");
         }
 
