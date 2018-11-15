@@ -15,7 +15,7 @@ namespace DispatcherKafka
 {
     public class KafkaConsumerImpl : IKafkaConsumer
     {
-        private static string kafkaEndPoint = "localhost:9092";
+        private static string kafkaEndPoint = "127.0.0.1:9092";
         private static string kafkaTopic = "sendtopic";
         private static string kafkaRetTopic = "rettopic";
         public void Listen()
