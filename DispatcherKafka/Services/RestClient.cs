@@ -52,6 +52,7 @@ namespace DispatcherKafka.Services
                 {
                     result.Result = await service.Content.ReadAsStringAsync();
                     result.MediaType = service.Content.Headers.ContentType.MediaType;
+                    result.StatusCode = service.StatusCode;
                 }
             }
             catch (Exception ex)

@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Templates\requestPaymentJs.json" />
     <None Remove="Templates\responseFacturaJs.json" />
+    <None Remove="Templates\responseResultJs.json" />
   </ItemGroup>
 
   <ItemGroup>

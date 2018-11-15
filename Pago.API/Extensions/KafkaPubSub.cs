@@ -19,14 +19,13 @@ namespace Pago.API.Extensions
         public static async Task<ResponseKafka> ValuetoPay(string invoiceRef)
         {
             KafkaProducer(invoiceRef);
-
             var message = KafkaConsumer();
+            //var message = OptionalConsumer(invoiceRef);
             var response = new ResponseKafka();
 
             try
             {
                 var serialize = JsonConvert.DeserializeObject<FacturaResponse>(message);
-
                 response.EstadoPeticion = HttpStatusCode.OK;
                 response.Result = serialize;
             }
@@ -43,14 +42,13 @@ namespace Pago.API.Extensions
         public static async Task<ResponseKafka> PayInvoice(string invoiceRef)
         {            
             KafkaProducer(invoiceRef);
-
             var message = KafkaConsumer();
+            //var message = OptionalConsumer(invoiceRef);
             var response = new ResponseKafka();
 
             try
             {
                 var serialize = JsonConvert.DeserializeObject<PagoResponse>(message);
-
                 response.EstadoPeticion = HttpStatusCode.OK;
                 response.Result = serialize;
             }
@@ -68,14 +66,14 @@ namespace Pago.API.Extensions
         public static async Task<ResponseKafka> Compensate(string invoiceRef)
         {            
             KafkaProducer(invoiceRef);
-
             var message = KafkaConsumer();
+            //var message = OptionalConsumer(invoiceRef);
+
             var response = new ResponseKafka();
 
             try
             {
                 var serialize = JsonConvert.DeserializeObject<PagoResponse>(message);
-
                 response.EstadoPeticion = HttpStatusCode.OK;
                 response.Result = serialize;
             }
@@ -140,6 +138,11 @@ namespace Pago.API.Extensions
                     message = "";
                 }
             }
+        }
+
+        private static string OptionalConsumer(string message)
+        {
+            return "";
         }
 
     }
