@@ -22,7 +22,7 @@ namespace Pago.API.Controllers
         public async Task<ActionResult> ValueToPay(string invoice)
         {
             //Todo: producir envento para kafka
-            //var result = await KafkaPubSub.ValuetoPay($"{invoice}#consultar");
+            var result = await KafkaPubSub.ValuetoPay($"{invoice}#consultar");
             return Ok("todo cool");
         }
 
