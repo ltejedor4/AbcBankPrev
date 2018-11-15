@@ -40,16 +40,17 @@ namespace DispatcherKafka
                     if (!string.IsNullOrEmpty(message))
                     {
                         var param = message.Split("#");
-                        Dispatching(param[0], param[1]);
+                        Dispatching(param[0], param[1], param[2]);
                         message = string.Empty;
                     }
                 }
             }
         }
-        public void Dispatching(string invoice, string accion)
+        public void Dispatching(string invoice, string accion, string valor)
         {
             string codConvenio = invoice.Substring(0, 4);
-            var response = RestClient.GetObject<Convenio>("http://172.20.0.2/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
+            //var response = RestClient.GetObject<Convenio>("http://172.20.0.2/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
+            var response = RestClient.GetObject<Convenio>("http://localhost:5000/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
 
             string json = "";
             if (response.IsSuccess)
@@ -68,13 +69,17 @@ namespace DispatcherKafka
                     }
                     else if (objConvenio.Metodo == MethodHttp.POST.ToString())
                     {
-                        data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}", invoice, MethodHttp.POST).Result;
-                        json = trans.Execute(data, "responseResult.json");
+                        string[] param = { invoice, valor };
+                        var peticion = trans.CreateRequest("requestPaymentJs.json", param);
+                        data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}/{invoice}", peticion, MethodHttp.POST).Result;
+                        json = trans.Execute(data, "responseResultJs.json");
                     }
                     else if (objConvenio.Metodo == MethodHttp.DELETE.ToString())
                     {
-                        data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}", invoice, MethodHttp.DELETE).Result;
-                        json = trans.Execute(data, "responseResult.json");
+                        string[] param = { invoice, valor };
+                        var peticion = trans.CreateRequest("requestPaymentJs.json", param);
+                        data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}/{invoice}", peticion, MethodHttp.DELETE).Result;
+                        json = trans.Execute(data, "responseResultJs.json");
                     }
                 }
                 else if (tipoServicio == TipoServicio.SOAP)
@@ -84,18 +89,19 @@ namespace DispatcherKafka
                         var peticion = trans.CreateRequest("requestFactura.xml", invoice);
                         data = SoapClient.ConsumeSoap(objConvenio.BaseUrl, accion, peticion).Result;
                         if (data.StatusCode != System.Net.HttpStatusCode.OK)
-                            json = CallSOAP(data.Result, "responseError.json");
+                            json = CallSOAP(data.Result, "responseErrorxml.json");
                         else
-                            json = CallSOAP(data.Result, "responseFactura.json");
+                            json = CallSOAP(data.Result, "responseFacturaxml.json");
                     }
                     else if (objConvenio.Metodo == MethodHttp.POST.ToString())
                     {
-                        var peticion = trans.CreateRequest("requestPayment.xml", invoice);
+                        string[] param = { invoice, valor };
+                        var peticion = trans.CreateRequest("requestPayment.xml", param);
                         data = SoapClient.ConsumeSoap(objConvenio.BaseUrl, accion, peticion).Result;
                         if (data.StatusCode != System.Net.HttpStatusCode.OK)
-                            json = CallSOAP(data.Result, "responseError.json");
+                            json = CallSOAP(data.Result, "responseErrorxml.json");
                         else
-                            json = CallSOAP(data.Result, "responseResult.json");
+                            json = CallSOAP(data.Result, "responseResultxml.json");
                     }
                 }
 

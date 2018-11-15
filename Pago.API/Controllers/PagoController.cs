@@ -20,38 +20,34 @@ namespace Pago.API.Controllers
         [HttpGet]
         [Route("{invoice}")]
         public async Task<ActionResult> ValueToPay(string invoice)
-        {
-            //Todo: producir envento para kafka
+        {            
             var result = await KafkaPubSub.ValuetoPay($"{invoice}#consultar");
-            return Ok("todo cool");
+            return Ok(result);
         }
 
         /// <summary>
         /// Pay a invoice
         /// </summary>
-        /// <param name="invoice">number that identified a invoice</param>
+        /// <param name="factura">object with essential factua data</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> PayInvoice(string invoice)
-        {
-            //Todo: producir envento para kafka
-            var result = await KafkaPubSub.PayInvoice($"{invoice}#pagar");
-            
-            return Ok("todo pagado");
+        public async Task<ActionResult> PayInvoice(FacturaResponse factura)
+        {            
+            var result = await KafkaPubSub.PayInvoice($"{factura.Invoice}#pagar#{factura.Amount}");            
+            return Ok(result);
 
         }
 
         /// <summary>
         /// Reverse a pay already done
         /// </summary>
-        /// <param name="invoice">number that identified a invoice</param>
+        /// <param name="factura">object with essential factua data</param>
         /// <returns></returns>
         [HttpDelete]
-        public async Task<ActionResult> Compensate(string invoice)
-        {
-            //Todo: producir envento para kafka
-            var result = await KafkaPubSub.Compensate($"{invoice}#compensar");
-            return Ok("todo compensado");
+        public async Task<ActionResult> Compensate(FacturaResponse factura)
+        {            
+            var result = await KafkaPubSub.Compensate($"{factura.Invoice}#compensar#{factura.Amount}");
+            return Ok(result);
         }
 
     }

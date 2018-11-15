@@ -1,0 +1,4 @@
+{
+  "Invoice": "#valueof($.idFactura)",
+  "Message": "#valueof($.mensaje)"
+}
