@@ -28,7 +28,7 @@ Se desea  un conjunto de servicios que representen las necesidades internas del 
 ## Estilo de Arquitectura
 La Arquitectura de la solución presentada se apoya en el Patron API Gateway con el cual se busca ocultar los microservicios que ofrecen las funcionalidades al cliente dejando un único Endpoint para que ellos se comuniquen. Todas las solicitudes entrantes seran enrutadas hacia los servicios especificos. Ver [aquí](https://github.com/ltejedor4/AbcBankPrev/blob/master/images/Arqui_Gateway.JPG) el modelo específico.
 
-![Arqui](https://github.com/ltejedor4/AbcBankPrev/blob/master/images/DiagComponentes_v1.png)
+![Arqui](https://github.com/ltejedor4/AbcBankPrev/blob/master/images/componentesABC_v2.png)
 ## Patrones de Diseño
 Otros patrones tambien manejados: Logic Centralization para evitar redundancia de servicio, Concurrent Contracts en conjunto con Service Facade con la finalidad de soportar nuevos Operadores y apoyar los requerimientos de acoplamiento y abstracción por multiples consumidores.
 
