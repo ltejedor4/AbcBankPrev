@@ -41,6 +41,8 @@ Se utiliza la herramienta gestora de APIs WSO2 la cual ayuda a la consecución d
 
 ![Inventory Manager](https://github.com/ltejedor4/AbcBankPrev/blob/master/images/Inventary_Mger.JPG)
 
+![Inventory Manager1](https://github.com/ltejedor4/AbcBankPrev/blob/master/images/Convenios.JPG)
+
 ## Ventajas
 La solución arquitectónica planteada brinda los siguientes beneficios:
 
