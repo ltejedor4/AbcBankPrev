@@ -59,7 +59,7 @@ namespace Convenio.API
             app.UseSwagger().
                 UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty("http://localhost:32787") ? "http://localhost:32787" : string.Empty) }/swagger/v1/swagger.json", "Convenio.API V1");
+                    c.SwaggerEndpoint($"{ (!string.IsNullOrEmpty("http://localhost:5000") ? "http://localhost:32787" : string.Empty) }/swagger/v1/swagger.json", "Convenio.API V1");
                     c.OAuthClientId("Convenioswaggerui");
                     c.OAuthAppName("Convenio Swagger UI");
                 });

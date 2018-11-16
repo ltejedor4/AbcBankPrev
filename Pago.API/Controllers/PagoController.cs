@@ -21,7 +21,7 @@ namespace Pago.API.Controllers
         [Route("{invoice}")]
         public async Task<ActionResult> ValueToPay(string invoice)
         {            
-            var result = await KafkaPubSub.ValuetoPay($"{invoice}#consultar");
+            var result = await KafkaPubSub.ValuetoPay($"{invoice}#consultar#0");
             return Ok(result);
         }
 

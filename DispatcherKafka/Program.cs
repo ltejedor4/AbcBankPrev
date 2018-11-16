@@ -7,7 +7,7 @@ namespace DispatcherKafka
         static void Main(string[] args)
         {
             var kafkaconsumer = new KafkaConsumerImpl();
-            //kafkaconsumer.Listen();
+            kafkaconsumer.Listen();
             
 
             //SOAP
@@ -18,7 +18,7 @@ namespace DispatcherKafka
             //REST
             //kafkaconsumer.Dispatching("2567", "consultar","0");
             //kafkaconsumer.Dispatching("2567", "pagar", "45644");
-            kafkaconsumer.Dispatching("2567", "compensar", "87878");
+            //kafkaconsumer.Dispatching("2567", "compensar", "87878");
         }
     }
 }

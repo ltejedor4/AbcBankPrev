@@ -13,7 +13,7 @@ namespace Pago.API.Extensions
 {
     public class KafkaPubSub
     {
-        private static string kafkaEndPoint = "127.0.0.1:9092";
+        private static string kafkaEndPoint = "172.20.0.8:9092";
         private static string kafkaTopic = "sendtopic";
         private static string kafkaRetTopic = "rettopic";
         public static async Task<ResponseKafka> ValuetoPay(string invoiceRef)

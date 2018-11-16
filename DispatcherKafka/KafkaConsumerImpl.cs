@@ -15,9 +15,11 @@ namespace DispatcherKafka
 {
     public class KafkaConsumerImpl : IKafkaConsumer
     {
-        private static string kafkaEndPoint = "127.0.0.1:9092";
+        private static string kafkaEndPoint = "172.20.0.8:9092";
         private static string kafkaTopic = "sendtopic";
         private static string kafkaRetTopic = "rettopic";
+
+        private static string urlApiConvenios = "http://172.20.0.7:80/api/v1/";
         public void Listen()
         {
             string message = string.Empty;
@@ -49,11 +51,11 @@ namespace DispatcherKafka
         public void Dispatching(string invoice, string accion, string valor)
         {
             string codConvenio = invoice.Substring(0, 4);
-            //var response = RestClient.GetObject<Convenio>("http://172.20.0.2/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
-            var response = RestClient.GetObject<Convenio>("http://localhost:5000/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
+            //var response = RestClient.GetObject<Convenio>("http://172.20.0.4:80/api/v1/", $"convenio/{codConvenio}/{accion}").Result;
+            var response = RestClient.GetObject<Convenio>(urlApiConvenios, $"convenio/{codConvenio}/{accion}").Result;
 
             string json = "";
-            if (response.IsSuccess)
+            if (response.IsSuccess && response.Result != null)
             {
                 var objConvenio = (Convenio)response.Result;
                 var tipoServicio = (TipoServicio)Enum.Parse(typeof(TipoServicio), objConvenio.CasoUso);
@@ -66,6 +68,8 @@ namespace DispatcherKafka
                     {
                         data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}/{invoice}").Result;
                         json = trans.Execute(data, "responseFacturaJs.json");
+                        if (!string.IsNullOrEmpty(json))
+                            json = trans.Execute(data, "ResponseFacturaS2Js.json");
                     }
                     else if (objConvenio.Metodo == MethodHttp.POST.ToString())
                     {
@@ -73,6 +77,8 @@ namespace DispatcherKafka
                         var peticion = trans.CreateRequest("requestPaymentJs.json", param);
                         data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}/{invoice}", peticion, MethodHttp.POST).Result;
                         json = trans.Execute(data, "responseResultJs.json");
+                        if (!string.IsNullOrEmpty(json))
+                            json = trans.Execute(data, "ResponseFacturaS2Js.json");
                     }
                     else if (objConvenio.Metodo == MethodHttp.DELETE.ToString())
                     {
@@ -80,6 +86,8 @@ namespace DispatcherKafka
                         var peticion = trans.CreateRequest("requestPaymentJs.json", param);
                         data = RestClient.ConsumeRest($"{objConvenio.BaseUrl}/{invoice}", peticion, MethodHttp.DELETE).Result;
                         json = trans.Execute(data, "responseResultJs.json");
+                        if (!string.IsNullOrEmpty(json))
+                            json = trans.Execute(data, "ResponseFacturaS2Js.json");
                     }
                 }
                 else if (tipoServicio == TipoServicio.SOAP)
@@ -112,6 +120,9 @@ namespace DispatcherKafka
                     Console.WriteLine($"Message send to kafka: {json}");
                 }
             }
+            else{
+                Console.WriteLine($"Error en el llamado del convenio");
+            }
         }
 
         private string CallSOAP(string result, string template)
@@ -131,7 +142,6 @@ namespace DispatcherKafka
 
             return trans.Execute(data, template);
         }
-
     }
 }
 
